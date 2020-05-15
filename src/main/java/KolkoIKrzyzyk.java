@@ -8,57 +8,56 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class KolkoIKrzyzyk extends Application {
-    private static ArrayList<Integer> playerPosition = new ArrayList<>();
-    private static ArrayList<Integer> computerPosition = new ArrayList<>();
-    private static ArrayList<Integer> draw = new ArrayList<>();
-    private static int computerTempPosition = 0;
+    Stage window;
+    Map<Integer, Button> buttonMapPosition = new HashMap<>();
+    StateGameChecker stateGameChecker = new StateGameChecker();
+    private String statementInfo = "Tic-tac-toe";
+    int size = 150;
+    int down = 30;
+    Image cross = new Image("cross.gif");
+    Image circle = new Image("circle.gif");
+    Button button1 = new Button(" ");
+    Button button2 = new Button(" ");
+    Button button3 = new Button(" ");
+    Button button4 = new Button(" ");
+    Button button5 = new Button(" ");
+    Button button6 = new Button(" ");
+    Button button7 = new Button(" ");
+    Button button8 = new Button(" ");
+    Button button9 = new Button(" ");
+    Button infoButton = new Button(statementInfo);
 
-    public static void drawToCheck(int theButton) {
-        Random rand = new Random();
-        playerPosition.add(theButton);
-        if (draw.size() == 1) {
-            playerPosition.add(draw.get(0));
-        } else {
-            draw.remove(draw.indexOf(theButton));
-            int tempInt = 0;
-            while (!(draw.contains(computerTempPosition) || draw.contains(theButton))) {
-                computerTempPosition = draw.get(rand.nextInt(draw.size()));
-            }
-            computerPosition.add(computerTempPosition);
-            draw.remove(draw.indexOf(computerTempPosition));
-            computerTempPosition = 0;
-        }
+
+    private Button getButton(int tempButton, Image cross) {
+        buttonMapPosition.put(1, button1);
+        buttonMapPosition.put(2, button2);
+        buttonMapPosition.put(3, button3);
+        buttonMapPosition.put(4, button4);
+        buttonMapPosition.put(5, button5);
+        buttonMapPosition.put(6, button6);
+        buttonMapPosition.put(7, button7);
+        buttonMapPosition.put(8, button8);
+        buttonMapPosition.put(9, button9);
+        Button tempButtonService = buttonMapPosition.get(tempButton);
+        tempButtonService.setGraphic(new ImageView(cross));
+        tempButtonService.setDisable(true);
+        return tempButtonService;
     }
 
-    public static String whoWon() {
-        List<List> possibleWins = new ArrayList<>();
-        possibleWins.add(Arrays.asList(1, 2, 3));
-        possibleWins.add(Arrays.asList(4, 5, 6));
-        possibleWins.add(Arrays.asList(7, 8, 9));
-        possibleWins.add(Arrays.asList(1, 4, 7));
-        possibleWins.add(Arrays.asList(2, 5, 8));
-        possibleWins.add(Arrays.asList(3, 6, 9));
-        possibleWins.add(Arrays.asList(1, 5, 9));
-        possibleWins.add(Arrays.asList(3, 5, 7));
+    public void buttonPlayerSetService(int tempButton) {
+        getButton(tempButton, cross);
 
-        String won = " ";
+    }
 
-        for (List i : possibleWins) {
-            if (playerPosition.containsAll(i)) {
-                won = "I won!";
-            } else if (computerPosition.containsAll(i)) {
-                won = "Computer wins!";
-            } else if (((playerPosition.size() + computerPosition.size()) == 9)) {
-                won = "Nobody has won.";
-            }
-        }
-        return won;
+    public void buttonComputerSetService(int nrOfButton) {
+        getButton(nrOfButton, circle);
+    }
+
+    private void closeProgram(Stage window) {
+        window.close();
     }
 
     public static void main(String[] args) {
@@ -67,593 +66,199 @@ public class KolkoIKrzyzyk extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-        int Size = 150;
-        for (int i = 1; i < 10; i++) {
-            draw.add(i);
-        }
-        Image cross = new Image("cross.gif");
-        Image circle = new Image("circle.gif");
-
-        Button button1 = new Button(" ");
-        Button button2 = new Button(" ");
-        Button button3 = new Button(" ");
-        Button button4 = new Button(" ");
-        Button button5 = new Button(" ");
-        Button button6 = new Button(" ");
-        Button button7 = new Button(" ");
-        Button button8 = new Button(" ");
-        Button button9 = new Button(" ");
-
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int nrButton = 1;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button1.setGraphic(new ImageView(cross));
-                button1.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(1);
+                buttonPlayerSetService(1);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int nrButton = 2;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button2.setGraphic(new ImageView(cross));
-                button2.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(2);
+                buttonPlayerSetService(2);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int nrButton = 3;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button3.setGraphic(new ImageView(cross));
-                button3.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(3);
+                buttonPlayerSetService(3);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
-
 
         button4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int nrButton = 4;
-
-                drawToCheck(nrButton);
-
-                System.out.println(whoWon());
-
-                button4.setGraphic(new ImageView(cross));
-                button4.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(4);
+                buttonPlayerSetService(4);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button5.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                int nrButton = 5;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button5.setGraphic(new ImageView(cross));
-                button5.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(5);
+                buttonPlayerSetService(5);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button6.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                int nrButton = 6;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button6.setGraphic(new ImageView(cross));
-                button6.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(6);
+                buttonPlayerSetService(6);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button7.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                int nrButton = 7;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button7.setGraphic(new ImageView(cross));
-                button7.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(7);
+                buttonPlayerSetService(7);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button8.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                int nrButton = 8;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button8.setGraphic(new ImageView(cross));
-                button8.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(8);
+                buttonPlayerSetService(8);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
         button9.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                int nrButton = 9;
-
-                drawToCheck(nrButton);
-                System.out.println(whoWon());
-
-                button9.setGraphic(new ImageView(cross));
-                button9.setDisable(true);
-
-                for (Integer cpuP : computerPosition) {
-                    switch (cpuP) {
-
-                        case 1:
-                            button1.setGraphic(new ImageView(circle));
-                            button1.setDisable(true);
-                            break;
-                        case 2:
-                            button2.setGraphic(new ImageView(circle));
-                            button2.setDisable(true);
-                            break;
-                        case 3:
-                            button3.setGraphic(new ImageView(circle));
-                            button3.setDisable(true);
-                            break;
-                        case 4:
-                            button4.setGraphic(new ImageView(circle));
-                            button4.setDisable(true);
-                            break;
-                        case 5:
-                            button5.setGraphic(new ImageView(circle));
-                            button5.setDisable(true);
-                            break;
-                        case 6:
-                            button6.setGraphic(new ImageView(circle));
-                            button6.setDisable(true);
-                            break;
-                        case 7:
-                            button7.setGraphic(new ImageView(circle));
-                            button7.setDisable(true);
-                            break;
-                        case 8:
-                            button8.setGraphic(new ImageView(circle));
-                            button8.setDisable(true);
-                            break;
-                        case 9:
-                            button9.setGraphic(new ImageView(circle));
-                            button9.setDisable(true);
-                            break;
-                    }
+                stateGameChecker.drawToCheck(9);
+                buttonPlayerSetService(9);
+                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+                    buttonComputerSetService(computerButtonPosition);
                 }
+                infoButton.setOnAction(e -> closeProgram(window));
+                String result = stateGameChecker.whoWon();
+                infoButton.setText((result.equals(" ")) ? statementInfo : result);
             }
         });
 
-        button1.setMaxSize(Size, Size);
-        button1.setMinSize(Size, Size);
+        button1.setLayoutY(down);
+        button1.setMaxSize(size, size);
+        button1.setMinSize(size, size);
 
-        button2.setLayoutX(Size);
-        button2.setMaxSize(Size, Size);
-        button2.setMinSize(Size, Size);
+        button2.setLayoutX(size);
+        button2.setLayoutY(down);
+        button2.setMaxSize(size, size);
+        button2.setMinSize(size, size);
 
-        button3.setLayoutX(Size * 2);
-        button3.setMaxSize(Size, Size);
-        button3.setMinSize(Size, Size);
+        button3.setLayoutX(size + size);
+        button3.setLayoutY(down);
+        button3.setMaxSize(size, size);
+        button3.setMinSize(size, size);
 
-        button4.setLayoutY(Size);
-        button4.setMaxSize(Size, Size);
-        button4.setMinSize(Size, Size);
+        button4.setLayoutY(size + down);
+        button4.setMaxSize(size, size);
+        button4.setMinSize(size, size);
 
-        button5.setLayoutX(Size);
-        button5.setLayoutY(Size);
-        button5.setMaxSize(Size, Size);
-        button5.setMinSize(Size, Size);
+        button5.setLayoutX(size);
+        button5.setLayoutY(size + down);
+        button5.setMaxSize(size, size);
+        button5.setMinSize(size, size);
 
-        button6.setLayoutX(Size * 2);
-        button6.setLayoutY(Size);
-        button6.setMaxSize(Size, Size);
-        button6.setMinSize(Size, Size);
+        button6.setLayoutX(size + size);
+        button6.setLayoutY(size + down);
+        button6.setMaxSize(size, size);
+        button6.setMinSize(size, size);
 
-        button7.setLayoutY(Size * 2);
-        button7.setMaxSize(Size, Size);
-        button7.setMinSize(Size, Size);
+        button7.setLayoutY(size + size + down);
+        button7.setMaxSize(size, size);
+        button7.setMinSize(size, size);
 
-        button8.setLayoutX(Size);
-        button8.setLayoutY(Size * 2);
-        button8.setMaxSize(Size, Size);
-        button8.setMinSize(Size, Size);
+        button8.setLayoutX(size);
+        button8.setLayoutY(size + size + down);
+        button8.setMaxSize(size, size);
+        button8.setMinSize(size, size);
 
-        button9.setLayoutX(Size * 2);
-        button9.setLayoutY(Size * 2);
-        button9.setMaxSize(Size, Size);
-        button9.setMinSize(Size, Size);
+        button9.setLayoutX(size + size);
+        button9.setLayoutY(size + size + down);
+        button9.setMaxSize(size, size);
+        button9.setMinSize(size, size);
+
+        infoButton.setLayoutX(1);
+        infoButton.setLayoutY(1);
+        infoButton.setMaxSize(447, 28);
+        infoButton.setMinSize(447, 28);
 
         // root
         Group group = new Group();
+        group.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9, infoButton);
 
-        group.getChildren().add(button1);
-        group.getChildren().add(button2);
-        group.getChildren().add(button3);
-        group.getChildren().add(button4);
-        group.getChildren().add(button5);
-        group.getChildren().add(button6);
-        group.getChildren().add(button7);
-        group.getChildren().add(button8);
-        group.getChildren().add(button9);
         // scene
         Scene scene = new Scene(group);
 
         // state
-        int width = 463;
-        int height = width + 26;
+        int width = 466;
+        int height = width + 26 + down;
 
-        primaryStage.setMaxWidth(width);
-        primaryStage.setMinWidth(width);
-        primaryStage.setMinHeight(height);
-        primaryStage.setMaxHeight(height);
-        primaryStage.setTitle("Kolko i krzyzyk");
-        primaryStage.setScene(scene);
-        primaryStage.setFullScreen(false);
-        primaryStage.show();
-
+        window = primaryStage;
+        window.setMaxWidth(width);
+        window.setMinWidth(width);
+        window.setMinHeight(height);
+        window.setMaxHeight(height);
+        window.setTitle("Kolko i krzyzyk");
+        window.setScene(scene);
+        window.setFullScreen(false);
+        window.show();
     }
 }
 
