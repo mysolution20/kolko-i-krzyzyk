@@ -1,6 +1,4 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,11 +10,11 @@ import java.util.*;
 
 public class KolkoIKrzyzyk extends Application {
     Stage window;
-    Map<Integer, Button> buttonMapPosition = new HashMap<>();
     StateGameChecker stateGameChecker = new StateGameChecker();
+    Map<Integer, Button> buttonMapPosition = new HashMap<>();
     private String statementInfo = "Tic-tac-toe";
-    int size = 150;
-    int down = 30;
+    private int size = 150;
+    private int down = 30;
     Image cross = new Image("cross.gif");
     Image circle = new Image("circle.gif");
     Button button1 = new Button(" ");
@@ -30,30 +28,18 @@ public class KolkoIKrzyzyk extends Application {
     Button button9 = new Button(" ");
     Button infoButton = new Button(statementInfo);
 
-
-    private Button getButton(int tempButton, Image cross) {
-        buttonMapPosition.put(1, button1);
-        buttonMapPosition.put(2, button2);
-        buttonMapPosition.put(3, button3);
-        buttonMapPosition.put(4, button4);
-        buttonMapPosition.put(5, button5);
-        buttonMapPosition.put(6, button6);
-        buttonMapPosition.put(7, button7);
-        buttonMapPosition.put(8, button8);
-        buttonMapPosition.put(9, button9);
+    private void getButton(int tempButton, Image cross) {
         Button tempButtonService = buttonMapPosition.get(tempButton);
         tempButtonService.setGraphic(new ImageView(cross));
         tempButtonService.setDisable(true);
-        return tempButtonService;
     }
 
-    public void buttonPlayerSetService(int tempButton) {
+        public void buttonPlayerSetService(int tempButton) {
         getButton(tempButton, cross);
-
     }
 
-    public void buttonComputerSetService(int nrOfButton) {
-        getButton(nrOfButton, circle);
+    public void buttonComputerSetService(int tempButton) {
+        getButton(tempButton, circle);
     }
 
     private void closeProgram(Stage window) {
@@ -64,133 +50,39 @@ public class KolkoIKrzyzyk extends Application {
         launch(args);
     }
 
+    public void eventButtonService(int nrEventButton) {
+        stateGameChecker.drawToCheck(nrEventButton);
+        buttonPlayerSetService(nrEventButton);
+        for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
+            buttonComputerSetService(computerButtonPosition);
+        }
+        infoButton.setOnAction(e -> closeProgram(window));
+        String result = stateGameChecker.whoWon();
+        infoButton.setText((result.equals(" ")) ? statementInfo : result);
+    }
+
     @Override
     public void start(Stage primaryStage) {
-        button1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(1);
-                buttonPlayerSetService(1);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
 
-        button2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(2);
-                buttonPlayerSetService(2);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
+        buttonMapPosition.put(1, button1);
+        buttonMapPosition.put(2, button2);
+        buttonMapPosition.put(3, button3);
+        buttonMapPosition.put(4, button4);
+        buttonMapPosition.put(5, button5);
+        buttonMapPosition.put(6, button6);
+        buttonMapPosition.put(7, button7);
+        buttonMapPosition.put(8, button8);
+        buttonMapPosition.put(9, button9);
 
-        button3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(3);
-                buttonPlayerSetService(3);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button4.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(4);
-                buttonPlayerSetService(4);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button5.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(5);
-                buttonPlayerSetService(5);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button6.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(6);
-                buttonPlayerSetService(6);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button7.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(7);
-                buttonPlayerSetService(7);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button8.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(8);
-                buttonPlayerSetService(8);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
-
-        button9.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stateGameChecker.drawToCheck(9);
-                buttonPlayerSetService(9);
-                for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
-                    buttonComputerSetService(computerButtonPosition);
-                }
-                infoButton.setOnAction(e -> closeProgram(window));
-                String result = stateGameChecker.whoWon();
-                infoButton.setText((result.equals(" ")) ? statementInfo : result);
-            }
-        });
+        button1.setOnAction(e -> eventButtonService(1));
+        button2.setOnAction(e -> eventButtonService(2));
+        button3.setOnAction(e -> eventButtonService(3));
+        button4.setOnAction(e -> eventButtonService(4));
+        button5.setOnAction(e -> eventButtonService(5));
+        button6.setOnAction(e -> eventButtonService(6));
+        button7.setOnAction(e -> eventButtonService(7));
+        button8.setOnAction(e -> eventButtonService(8));
+        button9.setOnAction(e -> eventButtonService(9));
 
         button1.setLayoutY(down);
         button1.setMaxSize(size, size);
