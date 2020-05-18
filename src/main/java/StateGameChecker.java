@@ -3,9 +3,21 @@ import java.util.List;
 import java.util.Random;
 
 public class StateGameChecker {
-    protected ArrayList<Integer> playerPosition = new ArrayList<>();
-    protected ArrayList<Integer> computerPosition = new ArrayList<>();
-    protected ArrayList<String> resultOfWhoWon = new ArrayList<>();
+    private List<Integer> playerPosition = new ArrayList<>();
+    private List<Integer> computerPosition = new ArrayList<>();
+    private List<String> resultOfWhoWon = new ArrayList<>();
+    private List<Integer> draw = new ArrayList<>();
+
+    public StateGameChecker() {
+        prepareDraw();
+    }
+
+    public void prepareDraw () {
+         for (int i = 1; i < 10; i++) {
+             draw.add(i);
+         }
+     }
+
     private int computerTempPosition = 0;
     private String won = " ";
     Random rand = new Random();
@@ -19,20 +31,21 @@ public class StateGameChecker {
         playerPosition.clear();
         computerPosition.clear();
         resultOfWhoWon.clear();
+        prepareDraw();
     }
 
 
     public void rememberPlayerChoice(int theButton) {
         playerPosition.add(theButton);
-        if (GameConstant.draw.size() == 1) {
-            playerPosition.add(GameConstant.draw.get(0));
+        if (draw.size() == 1) {
+            playerPosition.add(draw.get(0));
         } else {
-            GameConstant.draw.remove(GameConstant.draw.indexOf(theButton));
-            while (!(GameConstant.draw.contains(computerTempPosition) || GameConstant.draw.contains(theButton))) {
-                computerTempPosition = GameConstant.draw.get(rand.nextInt(GameConstant.draw.size()));
+            draw.remove((Integer) theButton);
+            while (!(draw.contains(computerTempPosition) || draw.contains(theButton))) {
+                computerTempPosition = draw.get(rand.nextInt(draw.size()));
             }
             computerPosition.add(computerTempPosition);
-            GameConstant.draw.remove(GameConstant.draw.indexOf(computerTempPosition));
+            draw.remove((Integer) computerTempPosition);
             computerTempPosition = 0;
         }
     }
@@ -68,9 +81,7 @@ public class StateGameChecker {
 //
 //    }
 
-
-
-    public ArrayList<Integer> getComputerPosition() {
+    public List<Integer> getComputerPosition() {
         return computerPosition;
     }
 }

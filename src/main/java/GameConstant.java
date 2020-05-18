@@ -16,11 +16,4 @@ public class GameConstant {
         possibleWins.add(Arrays.asList(3, 5, 7));
     }
 
-    static ArrayList<Integer> draw = new ArrayList<>();
-
-    static {
-        for (int i = 1; i < 10; i++) {
-            draw.add(i);
-        }
-    }
 }

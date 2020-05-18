@@ -84,7 +84,6 @@ public class KolkoIKrzyzyk extends Application {
     }
 
     public void prepareButton() {
-
         stateGameChecker.repeatGame();
 
         button1.setDisable(false);
