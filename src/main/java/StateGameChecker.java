@@ -3,14 +3,26 @@ import java.util.List;
 import java.util.Random;
 
 public class StateGameChecker {
-    private ArrayList<Integer> playerPosition = new ArrayList<>();
-    private ArrayList<Integer> computerPosition = new ArrayList<>();
+    protected ArrayList<Integer> playerPosition = new ArrayList<>();
+    protected ArrayList<Integer> computerPosition = new ArrayList<>();
     protected ArrayList<String> resultOfWhoWon = new ArrayList<>();
     private int computerTempPosition = 0;
     private String won = " ";
     Random rand = new Random();
+    private boolean continueGame = true;
 
-    public void drawToCheck(int theButton) {
+    public boolean getContinueGame() {
+        return continueGame;
+    }
+
+    public void repeatGame(){
+        playerPosition.clear();
+        computerPosition.clear();
+        resultOfWhoWon.clear();
+    }
+
+
+    public void rememberPlayerChoice(int theButton) {
         playerPosition.add(theButton);
         if (GameConstant.draw.size() == 1) {
             playerPosition.add(GameConstant.draw.get(0));
@@ -25,7 +37,7 @@ public class StateGameChecker {
         }
     }
 
-    public String whoWon() {
+    public String checkWinner() {
         if (resultOfWhoWon.size() == 0) {
             for (List i : GameConstant.possibleWins) {
                 if (playerPosition.containsAll(i)) {
@@ -50,6 +62,13 @@ public class StateGameChecker {
         }
         return won;
     }
+
+     if (result.equals("I won!") || result.equals("Computer wins!")){
+
+
+    }
+
+
 
     public ArrayList<Integer> getComputerPosition() {
         return computerPosition;

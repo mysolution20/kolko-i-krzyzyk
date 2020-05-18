@@ -17,32 +17,38 @@ public class KolkoIKrzyzyk extends Application {
     private int down = 30;
     Image cross = new Image("cross.gif");
     Image circle = new Image("circle.gif");
-    Button button1 = new Button(" ");
-    Button button2 = new Button(" ");
-    Button button3 = new Button(" ");
-    Button button4 = new Button(" ");
-    Button button5 = new Button(" ");
-    Button button6 = new Button(" ");
-    Button button7 = new Button(" ");
-    Button button8 = new Button(" ");
-    Button button9 = new Button(" ");
+    Button button1 = new Button();
+    Button button2 = new Button();
+    Button button3 = new Button();
+    Button button4 = new Button();
+    Button button5 = new Button();
+    Button button6 = new Button();
+    Button button7 = new Button();
+    Button button8 = new Button();
+    Button button9 = new Button();
     Button infoButton = new Button(statementInfo);
+    Button returnButton = new Button(" ");
 
-    private void getButton(int tempButton, Image cross) {
-        Button tempButtonService = buttonMapPosition.get(tempButton);
-        tempButtonService.setGraphic(new ImageView(cross));
+    private void setButtonGraphic(int buttonNumber, Image image) {
+        Button tempButtonService = buttonMapPosition.get(buttonNumber);
+        tempButtonService.setGraphic(new ImageView(image));
         tempButtonService.setDisable(true);
     }
 
-        public void buttonPlayerSetService(int tempButton) {
-        getButton(tempButton, cross);
+    private void setButtonDisable(Button  button) {
+        button.setDisable(true);
     }
 
-    public void buttonComputerSetService(int tempButton) {
-        getButton(tempButton, circle);
+    public void buttonPlayerSetService(int buttonNumber) {
+        setButtonGraphic(buttonNumber, cross);
+    }
+
+    public void buttonComputerSetService(int buttonNumber) {
+        setButtonGraphic(buttonNumber, circle);
     }
 
     private void closeProgram(Stage window) {
+
         window.close();
     }
 
@@ -50,16 +56,54 @@ public class KolkoIKrzyzyk extends Application {
         launch(args);
     }
 
-    public void eventButtonService(int nrEventButton) {
-        stateGameChecker.drawToCheck(nrEventButton);
+
+
+
+    public void markCurrentGameResult(int nrEventButton) {
+        stateGameChecker.rememberPlayerChoice(nrEventButton);
         buttonPlayerSetService(nrEventButton);
         for (Integer computerButtonPosition : stateGameChecker.getComputerPosition()) {
             buttonComputerSetService(computerButtonPosition);
         }
         infoButton.setOnAction(e -> closeProgram(window));
-        String result = stateGameChecker.whoWon();
+        String result = stateGameChecker.checkWinner();
         infoButton.setText((result.equals(" ")) ? statementInfo : result);
+
+
+        if (result.equals("I won!") || result.equals("Computer wins!")) {
+
+            for (Map.Entry<Integer, Button> entry : buttonMapPosition.entrySet()) {
+                setButtonDisable(entry.getValue());
+            }
+        }
     }
+
+    public void prepareButton() {
+        button1.setDisable(false);
+        button2.setDisable(false);
+        button3.setDisable(false);
+        button4.setDisable(false);
+        button5.setDisable(false);
+        button6.setDisable(false);
+        button7.setDisable(false);
+        button8.setDisable(false);
+        button9.setDisable(false);
+    }
+
+
+//
+//            if(statementInfo =="Tic-tac-toe")   {
+//        for (int i = 0; i < 9; i++) {
+//            setButtonDisable(i);
+//        }
+//    }
+
+        if( statementInfo != "Tic-tac-toe") {
+        for (Map.Entry<Integer, Button> entry : buttonMapPosition.entrySet()) {
+            setButtonDisable(entry.getKey());
+        }
+
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -74,15 +118,17 @@ public class KolkoIKrzyzyk extends Application {
         buttonMapPosition.put(8, button8);
         buttonMapPosition.put(9, button9);
 
-        button1.setOnAction(e -> eventButtonService(1));
-        button2.setOnAction(e -> eventButtonService(2));
-        button3.setOnAction(e -> eventButtonService(3));
-        button4.setOnAction(e -> eventButtonService(4));
-        button5.setOnAction(e -> eventButtonService(5));
-        button6.setOnAction(e -> eventButtonService(6));
-        button7.setOnAction(e -> eventButtonService(7));
-        button8.setOnAction(e -> eventButtonService(8));
-        button9.setOnAction(e -> eventButtonService(9));
+        button1.setOnAction(e -> markCurrentGameResult(1));
+        button2.setOnAction(e -> markCurrentGameResult(2));
+        button3.setOnAction(e -> markCurrentGameResult(3));
+        button4.setOnAction(e -> markCurrentGameResult(4));
+        button5.setOnAction(e -> markCurrentGameResult(5));
+        button6.setOnAction(e -> markCurrentGameResult(6));
+        button7.setOnAction(e -> markCurrentGameResult(7));
+        button8.setOnAction(e -> markCurrentGameResult(8));
+        button9.setOnAction(e -> markCurrentGameResult(9));
+        returnButton.setOnAction(e -> prepareButton());
+//        returnButton.setOnAction(e -> repeatGame());
 
         button1.setLayoutY(down);
         button1.setMaxSize(size, size);
@@ -128,12 +174,22 @@ public class KolkoIKrzyzyk extends Application {
 
         infoButton.setLayoutX(1);
         infoButton.setLayoutY(1);
-        infoButton.setMaxSize(447, 28);
-        infoButton.setMinSize(447, 28);
+        infoButton.setMaxSize(297, 28);
+        infoButton.setMinSize(297, 28);
+
+        returnButton.setLayoutX(300);
+        returnButton.setLayoutY(1);
+        returnButton.setMaxSize(148, 28);
+        returnButton.setMinSize(148, 28);
+
+//        infoButton.setLayoutX(1);
+//        infoButton.setLayoutY(1);
+//        infoButton.setMaxSize(447, 28);
+//        infoButton.setMinSize(447, 28);
 
         // root
         Group group = new Group();
-        group.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9, infoButton);
+        group.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9, infoButton,returnButton);
 
         // scene
         Scene scene = new Scene(group);
@@ -151,6 +207,7 @@ public class KolkoIKrzyzyk extends Application {
         window.setScene(scene);
         window.setFullScreen(false);
         window.show();
+
     }
 }
 
