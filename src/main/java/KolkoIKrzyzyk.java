@@ -39,6 +39,11 @@ public class KolkoIKrzyzyk extends Application {
         button.setDisable(true);
     }
 
+    private void setButtonEmptyGraphic(Button  button) {
+        button.setGraphic(null);
+    }
+
+
     public void buttonPlayerSetService(int buttonNumber) {
         setButtonGraphic(buttonNumber, cross);
     }
@@ -79,6 +84,9 @@ public class KolkoIKrzyzyk extends Application {
     }
 
     public void prepareButton() {
+
+        stateGameChecker.repeatGame();
+
         button1.setDisable(false);
         button2.setDisable(false);
         button3.setDisable(false);
@@ -88,6 +96,19 @@ public class KolkoIKrzyzyk extends Application {
         button7.setDisable(false);
         button8.setDisable(false);
         button9.setDisable(false);
+
+        setButtonEmptyGraphic(button1);
+        setButtonEmptyGraphic(button2);
+        setButtonEmptyGraphic(button3);
+        setButtonEmptyGraphic(button4);
+        setButtonEmptyGraphic(button5);
+        setButtonEmptyGraphic(button6);
+        setButtonEmptyGraphic(button7);
+        setButtonEmptyGraphic(button8);
+        setButtonEmptyGraphic(button9);
+
+
+//        tempButtonService.setGraphic(new ImageView(image));
     }
 
 
@@ -98,10 +119,10 @@ public class KolkoIKrzyzyk extends Application {
 //        }
 //    }
 
-        if( statementInfo != "Tic-tac-toe") {
-        for (Map.Entry<Integer, Button> entry : buttonMapPosition.entrySet()) {
-            setButtonDisable(entry.getKey());
-        }
+//        if( statementInfo != "Tic-tac-toe") {
+//        for (Map.Entry<Integer, Button> entry : buttonMapPosition.entrySet()) {
+//            setButtonDisable(entry.getKey());
+//        }
 
 
 
@@ -128,7 +149,7 @@ public class KolkoIKrzyzyk extends Application {
         button8.setOnAction(e -> markCurrentGameResult(8));
         button9.setOnAction(e -> markCurrentGameResult(9));
         returnButton.setOnAction(e -> prepareButton());
-//        returnButton.setOnAction(e -> repeatGame());
+
 
         button1.setLayoutY(down);
         button1.setMaxSize(size, size);

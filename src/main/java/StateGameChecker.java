@@ -63,10 +63,10 @@ public class StateGameChecker {
         return won;
     }
 
-     if (result.equals("I won!") || result.equals("Computer wins!")){
-
-
-    }
+//     if (result.equals("I won!") || result.equals("Computer wins!")){
+//
+//
+//    }
 
 
 
