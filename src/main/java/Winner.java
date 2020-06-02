@@ -1,6 +1,6 @@
 public enum Winner {
     PLAYER,
     COMPUTER,
-    NO_ONE
-
+    NO_ONE,
+    EMPTY
 }

@@ -6,10 +6,9 @@ public class StateGameChecker {
     private final List<Integer> playerPosition = new ArrayList<>();
     private final List<Integer> computerPosition = new ArrayList<>();
     private final List<Integer> draw = new ArrayList<>();
-    private boolean wonOne;
     private int computerTempPosition = 0;
-    private String won = " ";
-    private Winner winner = Winner.NO_ONE;
+    private String won;
+    Winner hasWon;
     Random rand = new Random();
 
     public StateGameChecker() {
@@ -17,7 +16,6 @@ public class StateGameChecker {
     }
 
     public void prepareDraw() {
-        boolean hasWon = false;
         draw.clear();
         for (int i = 1; i < 10; i++) {
             draw.add(i);
@@ -25,7 +23,7 @@ public class StateGameChecker {
     }
 
     public void repeatGame() {
-        wonOne = false;
+        won = GameConstant.gameName;
         playerPosition.clear();
         computerPosition.clear();
         prepareDraw();
@@ -41,66 +39,43 @@ public class StateGameChecker {
                 computerTempPosition = draw.get(rand.nextInt(draw.size()));
             }
             computerPosition.add(computerTempPosition);
-            draw.remove((Integer) computerTempPosition); //            System.out.println(playerPosition);            System.out.println(computerTempPosition);            System.out.println(draw);
+            draw.remove((Integer) computerTempPosition);
             computerTempPosition = 0;
         }
     }
 
-    public boolean hasWon() {
-        wonOne = false;
+    public Winner whoIsWinner() {
         for (List i : GameConstant.possibleWins) {
-            if (playerPosition.containsAll(i) || computerPosition.containsAll(i)) {
-                wonOne = true;
+            if (playerPosition.containsAll(i)) {
+                hasWon = Winner.PLAYER;
+                break;
+            } else if (computerPosition.containsAll(i)) {
+                hasWon = Winner.COMPUTER;
+                break;
+            } else if (playerPosition.size() + computerPosition.size() >= 9 && hasWon != Winner.PLAYER ||
+                    playerPosition.size() + computerPosition.size() >= 9 && hasWon != Winner.COMPUTER) {
+                hasWon = Winner.NO_ONE;
+            } else {
+                hasWon = Winner.EMPTY;
             }
         }
-        return wonOne;
+        return hasWon;
     }
 
-//    Winner hasWon = Winner.NO_ONE;
-//    public Winner whoIsWinner() {
-//        for (List i : GameConstant.possibleWins) {
-//            if (playerPosition.containsAll(i)) {
-//                hasWon = Winner.PLAYER;
-//            } else if (computerPosition.containsAll(i)) {
-//                hasWon = Winner.COMPUTER;
-//            } else {
-//                hasWon = Winner.NO_ONE;
-//            }
-//        }
-//        return hasWon;
-//    }
-
     public String checkWinner() {
-
-//        switch (whoIsWinner()) {
-//            case PLAYER:
-//                won = "I won!";
-//                break;
-//            case COMPUTER:
-//                won = "Computer wins!";
-//                break;
-//            case NO_ONE:
-//                won = "Nobody has won.";
-//                break;
-//            default:
-//                won = " ";
-//                break;
-//        }
-//        return won;
-
-        if (hasWon()) {
-            for (List i : GameConstant.possibleWins) {
-                if (playerPosition.containsAll(i)) {
-                    won = "I won!";
-                }
-                if (computerPosition.containsAll(i)) {
-                    won = "Computer wins!";
-                }
-            }
-        } else if ((playerPosition.size() + computerPosition.size()) >= 9) {
-            won = "Nobody has won.";
-        } else {
-            won = " ";
+        switch (whoIsWinner()) {
+            case PLAYER:
+                won = "I won!";
+                break;
+            case COMPUTER:
+                won = "Computer wins!";
+                break;
+            case NO_ONE:
+                won = "Nobody has won.";
+                break;
+            case EMPTY:
+                won = GameConstant.gameName;
+                break;
         }
         return won;
     }
