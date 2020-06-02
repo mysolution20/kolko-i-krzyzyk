@@ -3,37 +3,33 @@ import java.util.List;
 import java.util.Random;
 
 public class StateGameChecker {
-    private List<Integer> playerPosition = new ArrayList<>();
-    private List<Integer> computerPosition = new ArrayList<>();
-    private List<String> resultOfWhoWon = new ArrayList<>();
-    private List<Integer> draw = new ArrayList<>();
+    private final List<Integer> playerPosition = new ArrayList<>();
+    private final List<Integer> computerPosition = new ArrayList<>();
+    private final List<Integer> draw = new ArrayList<>();
+    private boolean wonOne;
+    private int computerTempPosition = 0;
+    private String won = " ";
+    private Winner winner = Winner.NO_ONE;
+    Random rand = new Random();
 
     public StateGameChecker() {
         prepareDraw();
     }
 
-    public void prepareDraw () {
-         for (int i = 1; i < 10; i++) {
-             draw.add(i);
-         }
-     }
-
-    private int computerTempPosition = 0;
-    private String won = " ";
-    Random rand = new Random();
-    private boolean continueGame = true;
-
-    public boolean getContinueGame() {
-        return continueGame;
+    public void prepareDraw() {
+        boolean hasWon = false;
+        draw.clear();
+        for (int i = 1; i < 10; i++) {
+            draw.add(i);
+        }
     }
 
-    public void repeatGame(){
+    public void repeatGame() {
+        wonOne = false;
         playerPosition.clear();
         computerPosition.clear();
-        resultOfWhoWon.clear();
         prepareDraw();
     }
-
 
     public void rememberPlayerChoice(int theButton) {
         playerPosition.add(theButton);
@@ -45,41 +41,69 @@ public class StateGameChecker {
                 computerTempPosition = draw.get(rand.nextInt(draw.size()));
             }
             computerPosition.add(computerTempPosition);
-            draw.remove((Integer) computerTempPosition);
+            draw.remove((Integer) computerTempPosition); //            System.out.println(playerPosition);            System.out.println(computerTempPosition);            System.out.println(draw);
             computerTempPosition = 0;
         }
     }
 
+    public boolean hasWon() {
+        wonOne = false;
+        for (List i : GameConstant.possibleWins) {
+            if (playerPosition.containsAll(i) || computerPosition.containsAll(i)) {
+                wonOne = true;
+            }
+        }
+        return wonOne;
+    }
+
+//    Winner hasWon = Winner.NO_ONE;
+//    public Winner whoIsWinner() {
+//        for (List i : GameConstant.possibleWins) {
+//            if (playerPosition.containsAll(i)) {
+//                hasWon = Winner.PLAYER;
+//            } else if (computerPosition.containsAll(i)) {
+//                hasWon = Winner.COMPUTER;
+//            } else {
+//                hasWon = Winner.NO_ONE;
+//            }
+//        }
+//        return hasWon;
+//    }
+
     public String checkWinner() {
-        if (resultOfWhoWon.size() == 0) {
+
+//        switch (whoIsWinner()) {
+//            case PLAYER:
+//                won = "I won!";
+//                break;
+//            case COMPUTER:
+//                won = "Computer wins!";
+//                break;
+//            case NO_ONE:
+//                won = "Nobody has won.";
+//                break;
+//            default:
+//                won = " ";
+//                break;
+//        }
+//        return won;
+
+        if (hasWon()) {
             for (List i : GameConstant.possibleWins) {
                 if (playerPosition.containsAll(i)) {
-                    resultOfWhoWon.add("I won!");
-                    won = resultOfWhoWon.get(0);
+                    won = "I won!";
                 }
-            }
-        }
-        if (resultOfWhoWon.size() == 0) {
-            for (List i : GameConstant.possibleWins) {
                 if (computerPosition.containsAll(i)) {
-                    resultOfWhoWon.add("Computer wins!");
-                    won = resultOfWhoWon.get(0);
+                    won = "Computer wins!";
                 }
             }
-        }
-        if (resultOfWhoWon.size() == 0) {
-            if ((playerPosition.size() + computerPosition.size()) >= 9) {
-                resultOfWhoWon.add("Nobody has won.");
-                won = resultOfWhoWon.get(0);
-            }
+        } else if ((playerPosition.size() + computerPosition.size()) >= 9) {
+            won = "Nobody has won.";
+        } else {
+            won = " ";
         }
         return won;
     }
-
-//     if (result.equals("I won!") || result.equals("Computer wins!")){
-//
-//
-//    }
 
     public List<Integer> getComputerPosition() {
         return computerPosition;

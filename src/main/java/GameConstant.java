@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameConstant {
+    static String gameName = "Tic-tac-toe";
     static List<List> possibleWins = new ArrayList<>();
 
     static {
@@ -15,5 +16,4 @@ public class GameConstant {
         possibleWins.add(Arrays.asList(1, 5, 9));
         possibleWins.add(Arrays.asList(3, 5, 7));
     }
-
 }
