@@ -45,7 +45,7 @@ public class StateGameChecker {
     }
 
     public Winner whoIsWinner() {
-        for (List i : GameConstant.possibleWins) {
+        for (List<Integer> i : GameConstant.possibleWins)
             if (playerPosition.containsAll(i)) {
                 hasWon = Winner.PLAYER;
                 break;
@@ -58,7 +58,6 @@ public class StateGameChecker {
             } else {
                 hasWon = Winner.EMPTY;
             }
-        }
         return hasWon;
     }
 

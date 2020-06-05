@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-public class KolkoIKrzyzyk<e> extends Application {
+public class KolkoIKrzyzyk extends Application {
     Stage window;
     StateGameChecker stateGameChecker = new StateGameChecker();
     Map<Integer, Button> buttonMapPosition = new HashMap<>();

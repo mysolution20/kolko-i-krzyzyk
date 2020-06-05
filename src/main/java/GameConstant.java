@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GameConstant {
     static String gameName = "Tic-tac-toe";
-    static List<List> possibleWins = new ArrayList<>();
+    static List<List<Integer>> possibleWins = new ArrayList<>();
 
     static {
         possibleWins.add(Arrays.asList(1, 2, 3));
